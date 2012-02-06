@@ -241,11 +241,11 @@
                         <enum>Horizontal</enum>
                     </property>
                     <property name="sizeType">
-                        <enum>Expanding</enum>
+                        <enum>Fixed</enum>
                     </property>
                     <property name="sizeHint">
                         <size>
-                            <width>40</width>
+                            <width>16</width>
                             <height>20</height>
                         </size>
                     </property>
