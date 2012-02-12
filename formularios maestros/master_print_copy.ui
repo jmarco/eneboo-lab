@@ -278,11 +278,11 @@
                         <enum>Horizontal</enum>
                     </property>
                     <property name="sizeType">
-                        <enum>Expanding</enum>
+                        <enum>Fixed</enum>
                     </property>
                     <property name="sizeHint">
                         <size>
-                            <width>40</width>
+                            <width>16</width>
                             <height>30</height>
                         </size>
                     </property>
@@ -356,6 +356,8 @@
         </widget>
     </vbox>
 </widget>
+<customwidgets>
+</customwidgets>
 <images>
     <image name="image12200">
         <data format="PNG" length="535">89504e470d0a1a0a0000000d49484452000000100000001008060000001ff3ff61000001de49444154789ca5934f48946110c67f9f7db9a11994d4ee1ea2601112cb8a2512695988b23a5997820ed1a53a65972e41a72e5db35b05219e0c0f0612148910c9627fb63fe23f8aa020775bc3b516b5dcef9b990edbba9a492e3d30f0f2be33cf3ccf0caf934824f81fb800cfa74296c92900260280ef7b00a82a26829a61228808b5d5c2d17ac70170fb278256535345a8b6bccef79e8ddba9fd958e3b9b3766a766ca963ee759c9c2d5e3e1b2092eb67f2c10143dff896432b96271341a45544a0a7cdfe77cfba78584db97b601108bc5fe4a90cbe550ff374171dac5a2d54245172b586ea3a16127d9ecf4ca04450b2a829a2e79740c46c74697dc8d655e323ef98a999f39f25e9e1fb2033889eb7b1e2a42dbadcc42f2cd0b41a03483dec12ed236c4c178135b37d5d13f7c9fc1e13e5e7cd968ae89a26adc38b765913c5bd2bde76927adc75a900a6177b885c723dd34ed6aa6bbf72e156a8aaa2c8b4824422a9522954a31f92dcd5a673dadf56d005c3e748748b091bc3f8fbb7d8370adeb032a82f882aaa2aa88e715ce6664bf4f333291e0ede701ae1ce9e0faa3b3ac5b13a0d20de0ace637bef9fac4fade75d0dc7880baf05edea75f93181a201e395d58e3bfb06773dcf1246f3d0f3b999b7f4055a09a13b133ec0b1d767e018942f51010d0a6f80000000049454e44ae426082</data>
