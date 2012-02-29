@@ -1,0 +1,9 @@
+descomprimimos, modificamos fuente
+ejecutamos
+ant
+cd build
+para crear el war
+
+jar cvf nombre.war .
+listo !!
+

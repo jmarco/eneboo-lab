@@ -1,0 +1,8 @@
+1.0
+Versión incial
+1.1
+Se lanza la descarga directamente al pulsar imprimir en el abk engine.
+Eliminados botones recoger e imprimir.
+
+
+

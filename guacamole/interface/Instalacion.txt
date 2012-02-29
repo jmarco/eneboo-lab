@@ -1,0 +1,11 @@
+sudo apt-get install tomcat6 libvncserver0
+Desde http://sourceforge.net/projects/guacamole/files/testing/ descargamos estos ficheros:
+
+guacamole
+guacd
+libguac-client-vnc0
+libguac0
+... y los instalamos
+
+despues en final , ejecutamos instalar.sh como root
+

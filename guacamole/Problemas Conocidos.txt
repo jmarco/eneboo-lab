@@ -1,0 +1,8 @@
+Problema:
+si pulsamos la tecla 'd' el foco pasa al fondo del escritorio y se ocultan todas las ventanas
+
+Solución: 
+Entramos en una sesión normal(gnome) en ese usuario Sistema->Preferencias->Combinaciones de teclas->
+ Ocultar todas las ventanas normales y dar foco al escritorio (aqui cambiamos el valor a por ejemplo alt+d)
+
+

@@ -1,0 +1,36 @@
+Guacamole
+
+Un interfaz escrito en ajax, sobre un servidor tomcat. Este ofrece un teclado virtual y visionado de un servidor vnc a traves de una conexión html puerto 8080. Permite la autenticación de usuario y contraseña. Según el usuario y contraseña el servidor conecta a un puerto vnc u otro. (600mb ram de consumo aproximado por sesión)
+
+
+Interface
+
+Instala un servidor apache tomcat y genera e instalar el fichero war. El uso es muy simple. Entramos en la url http://url:8080/strom y ponemos un usuario y contraseña. Del resto se encarga el tomcat.
+
+vnc
+
+Instala los usuarios.
+Cada usuario es una instancia de escritorio virtual, que el interface diferencia por el puerto usado.
+
+Descargas de documentos:
+
+Al pulsar imprimir , el ejecutable genera una pdf y lo deja en una carpeta determinada. Seguidamente pone una marca en el portapapeles y esta la recoge el interfaz  cliente. Automaticamente se lanza una llamada a descargar un fichero en una url determinada(el pdf anterior).
+El ejecutable se marca para el uso con guacamole.
+
+
+Ventajas:
+
+- Solo está abierto el puerto 8080. Los puertos de vnc solo funciona en local en el servidor.
+
+- Compatible con cualquier navegador html5.
+
+
+
+Desventajas 
+
+- En desarrollo.
+- Servidor Linux y un escritorio(puede ser virtual) por usuario.
+
+
+
+

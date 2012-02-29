@@ -1,0 +1,18 @@
+#!/bin/sh
+
+# Uncomment the following two lines for normal desktop:
+# unset SESSION_MANAGER
+# exec /etc/X11/xinit/xinitrc
+
+[ -x /etc/vnc/xstartup ] && exec /etc/vnc/xstartup
+[ -r $HOME/.Xresources ] && xrdb $HOME/.Xresources
+xsetroot -solid grey
+vncconfig -iconic &
+metacity &
+panel &
+x=1 &
+while [ x==1 ]
+	do
+$HOME/ruta_ejecutable/bin/fllite 
+       
+       done

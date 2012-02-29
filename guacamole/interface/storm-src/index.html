@@ -1,0 +1,454 @@
+<!DOCTYPE HTML>
+
+<!--
+    Guacamole - Clientless Remote Desktop
+    Copyright (C) 2010  Michael Jumper
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<html>
+
+    <head>
+        <link rel="icon" type="image/png" href="images/guacamole-icon-64.png"/>
+        <link rel="stylesheet" type="text/css" href="styles/guacamole.css"/>
+        <link rel="stylesheet" type="text/css" href="styles/keyboard.css"/>
+        <title>Abakudt Storm</title>
+    </head>
+
+    <body>
+
+        <div id="login-ui">
+            <div id="login-dialog-middle">
+
+                <div id="login-logo">
+                    <img src="images/login-logo.png" alt="\_GUAC_/"/>
+                </div>
+
+                <div id="login-dialog">
+
+                    <h1>Abakudt Storm Login</h1>
+
+                    <p id="login-error"></p>
+
+                    <form id="login-form" action="login" method="post">
+                        <table id="login-fields">
+                            <tr>
+                                <th>Usuario</th>
+                                <td><input type="text" name="username" id="username"/></td>
+                            </tr>
+                            <tr>
+                                <th>Contrase&ntilde;a</th>
+                                <td><input type="password" name="password" id="password"/></td>
+                            </tr>
+                        </table>
+
+                        <div id="buttons">
+                            <input type="submit" name="login" id="login" value="Entrar"/>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Main UI - hidden until login succeeds -->
+        <div id="main-guacamole-ui" style="display: none">
+
+            <!-- Menu -->
+            <div id="menu">
+
+                <!-- Clipboard -->
+               <button id="showClipboard">Mostrar Porta papeles</button>
+                <div id="clipboardDiv">
+                    <h2>Porta papeles</h2>
+                    <p>
+                    Texto copiado / cortado en Guacamole aparecer&aacute; aqu&iacute;. Los cambios en el texto afectar&aacute; el portapapeles remoto, y se pastable en el escritorio remoto. Utilice el cuadro de texto a continuaci&oacute;n como una interfaz entre el cliente y el servidor de portapapeles.
+                    </p>
+                    <textarea rows="10" cols="40" id="clipboard"></textarea>
+                </div>
+		<!-- <button id="CtrlAltDelete">Ctrl-Alt-Supr</button> -->
+                <button id="showKeyboard">Mostrar Teclado</button>
+               
+		<!-- <button id="AcRecoger">Recoger</button> -->
+
+                <!-- Logo and status -->
+                <img id="logo" src="images/guacamole-logo.png" alt="Guacamole" title="Guacamole 0.3.0"/>
+                <span id="state"></span>
+
+                <a href="agpl-3.0-standalone.html"><img id="license" src="images/agpl-logo.png" alt="AGPLv3"/></a>
+            </div>
+
+
+            <!-- Display -->
+            <div id="display" class="guac-display guac-loading">
+                <!-- On-screen keyboard -->
+                <div id="keyboardContainer"></div>
+            </div>
+
+
+            <!-- Error Dialog-->
+            <div id="errorDialog" class="errorDialogOuter">
+                <div class="errorDialogMiddle">
+                    <div class="errorDialog">
+                        <h1>Error</h1>
+                        <p id="errorText"></p>
+                        <div class="buttons"><button id="reconnect">Re conectar</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Scripts -->
+        <script type="text/javascript" src="guacamole-common-js/keymap.js"></script>
+        <script type="text/javascript" src="guacamole-common-js/keyboard.js"></script>
+        <script type="text/javascript" src="guacamole-common-js/mouse.js"></script>
+        <script type="text/javascript" src="guacamole-common-js/layer.js"></script>
+        <script type="text/javascript" src="guacamole-common-js/tunnel.js"></script>
+        <script type="text/javascript" src="guacamole-common-js/guacamole.js"></script>
+        <script type="text/javascript" src="guacamole-common-js/oskeyboard.js"></script>
+	<script type="text/javascript" src="guacamole-common-js/recoger.js"></script>
+        <!-- Init -->
+        <script type="text/javascript"> /* <![CDATA[ */
+
+            var loginForm = document.getElementById("login-form");
+            var loginUI = document.getElementById("login-ui");
+
+//Recoge datos de formulario de acceso.
+            loginForm.onsubmit = function() {
+
+                var username = document.getElementById("username");
+                var password = document.getElementById("password");
+
+                var data =
+                       "username=" + encodeURIComponent(username.value)
+                    + "&password=" + encodeURIComponent(password.value)
+
+                var xmlhttprequest = new XMLHttpRequest();
+                xmlhttprequest.open("POST", "login", false);
+                xmlhttprequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xmlhttprequest.setRequestHeader("Content-length", data.length);
+                xmlhttprequest.send(data);
+
+                if (xmlhttprequest.status == 200) {
+                    loginUI.style.display = "none";
+                    startGuacamole();
+                }
+                else {
+
+                    var loginError = document.getElementById("login-error");
+
+                    // Display error, reset and refocus password field
+                    loginError.textContent = "Logeo Invalido. Por favor , prueba de nuevo";
+                    password.value = "";
+                    password.focus();
+
+                }
+
+                return false;
+
+            }
+
+            // Shows guacamole interface and initiates connection to guacamole
+            function startGuacamole() {
+
+                document.getElementById("main-guacamole-ui").style.display = "block";
+
+                var menu = document.getElementById("menu");
+                var display = document.getElementById("display");
+                var logo = document.getElementById("logo");
+
+                var errorDialog = document.getElementById("errorDialog");
+                var errorDialogText = document.getElementById("errorText");
+
+                // Position display correctly
+                window.onresize = function() {
+                    display.style.top = menu.offsetHeight + "px";
+                };
+
+                window.onresize();
+
+                // Instantiate client
+                var guac = new GuacamoleClient(
+                    display,
+                    new GuacamoleHTTPTunnel("tunnel")
+                );
+
+                var state = document.getElementById("state");
+                guac.setOnStateChangeHandler(function(clientState) {
+
+                        switch (clientState) {
+                            case 0:
+                                state.textContent = "Ocupado."
+                                break;
+                            case 1:
+                                state.textContent = "Conectando...";
+                                break;
+                            case 2:
+                                state.textContent = "Conectado, Esperando primeros datos...";
+                                break;
+                            case 3:
+                                display.className = display.className.replace(/guac-loading/, '');
+                                menu.className = "connected";
+                                state.textContent = "Conectado.";
+                                break;
+                            case 4:
+                                state.textContent = "Desconectando...";
+                                break;
+                            case 5:
+                                state.textContent = "Desconectado.";
+                                break;
+                            default:
+                                state.textContent = "Desconocido";
+                        }
+                });
+
+                // Cache error image (might not be available when error occurs)
+                var guacErrorImage = new Image();
+                guacErrorImage.src = "images/noguacamole-logo.png";
+
+                guac.setNameHandler(function(name) {
+                    document.title = name;
+                });
+
+                guac.setErrorHandler(function(error) {
+
+                    guac.disconnect();
+
+                    menu.className = "error";
+                    display.className += " guac-error";
+
+                    logo.src = guacErrorImage.src;
+                    errorDialogText.textContent = error;
+                    errorDialog.style.visibility = "visible";
+
+                    // Show error by desaturating display
+                    var layers = guac.getLayers();
+                    for (var i=0; i<layers.length; i++) {
+                        layers[i].filter(desaturateFilter);
+                    }
+
+                    // Filter for desaturation
+                    function desaturateFilter(data, width, height) {
+
+                        for (var i=0; i<data.length; i+=4) {
+
+                            // Get RGB values
+                            var r = data[i];
+                            var g = data[i+1];
+                            var b = data[i+2];
+
+                            // Desaturate
+                            var v = Math.max(r, g, b) / 2;
+                            data[i]   = v;
+                            data[i+1] = v;
+                            data[i+2] = v;
+
+                        }
+
+                    }
+
+                });
+
+                // Mouse
+                var mouse = new GuacamoleMouse(display);
+                mouse.setButtonPressedHandler(
+                    function(mouseState) {
+                        guac.sendMouseState(mouseState);
+                    }
+                );
+
+                mouse.setButtonReleasedHandler(
+                    function(mouseState) {
+                        guac.sendMouseState(mouseState);
+                    }
+                );
+
+                mouse.setMovementHandler(
+                    function(mouseState) {
+                        guac.sendMouseState(mouseState);
+                    }
+                );
+
+                // Keyboard
+                var keyboard = new GuacamoleKeyboard(document);
+
+                function disableKeyboard() {
+                    keyboard.setKeyPressedHandler(null);
+                    keyboard.setKeyReleasedHandler(null);
+                }
+
+                function enableKeyboard() {
+                    keyboard.setKeyPressedHandler(
+                        function (keysym) {
+                            guac.sendKeyEvent(1, keysym);
+                        }
+                    );
+
+                    keyboard.setKeyReleasedHandler(
+                        function (keysym) {
+                            guac.sendKeyEvent(0, keysym);
+                        }
+                    );
+                }
+
+                // Enable keyboard by default
+                enableKeyboard();
+
+                // Reconnect button
+                var reconnect = document.getElementById("reconnect");
+                reconnect.onclick = function() {
+                    window.location.reload();
+                };
+
+                // Connect
+                guac.connect();
+
+                // Disconnect on close
+                window.onunload = function() {
+                    guac.disconnect();
+                }
+
+                // Handle clipboard events
+                var clipboardElement = document.getElementById("clipboard");
+                clipboardElement.onchange = function() {
+
+                    var text = clipboardElement.value;
+                    guac.setClipboard(text);
+
+                };
+
+                // Ignore keypresses when clipboard is focused
+                clipboardElement.onfocus = function() {
+                    disableKeyboard();
+                };
+
+                // Capture keypresses when clipboard is not focused
+                clipboardElement.onblur = function() {
+                    enableKeyboard();
+                };
+
+                // Server copy handler
+                guac.setClipboardHandler(
+                    function(data) {
+		// var text = clipboardElement.value;
+                   // guac.setClipboard(text);
+                     //   clipboardElement.value = data;
+			// var text = data;
+			
+			if (data == "STORM_IMPRIME") 
+							{
+							//clipboardElement.value = "";
+							var minombre = document.getElementById("username");
+             						var recoger = location.protocol+"//"+location.hostname+":"+location.port+"/storm/traspaso/"+minombre.value+"/outprintps.pdf";	
+							window.open(recoger);
+							guac.setClipboard(""); //limpiamos el portapapeles local,para que cuando venga de nuevo reaccione correctamente
+							}
+			if (data == "STORM_IMPRIME_J") 
+							{
+							//clipboardElement.value = "";
+							var minombre = document.getElementById("username");
+             						var recoger = location.protocol+"//"+location.hostname+":"+location.port+"/storm/traspaso/"+minombre.value+"/reporte.html";	
+							window.open(recoger);
+							guac.setClipboard(""); //limpiamos el portapapeles local,para que cuando venga de nuevo reaccione correctamente
+							}
+                    }
+                );
+
+
+                // Show/Hide clipboard
+                var clipboardDiv = document.getElementById("clipboardDiv");
+                var showClipboard = document.getElementById("showClipboard");
+                showClipboard.onclick = function() {
+
+                    var displayed = clipboardDiv.style.display;
+                    if (displayed != "block") {
+                        clipboardDiv.style.display = "block";
+                        showClipboard.innerHTML = "Ocultar Porta papeles";
+                    }
+                    else {
+                        clipboardDiv.style.display = "none";
+                        showClipboard.innerHTML = "Mostrar Porta papeles";
+                        clipboardElement.onchange();
+                    }
+
+                };
+
+
+                // Show/Hide keyboard
+                var keyboardContainer = document.getElementById("keyboardContainer");
+                var showKeyboard = document.getElementById("showKeyboard");
+                showKeyboard.onclick = function() {
+
+                    var displayed = keyboardContainer.style.display;
+                    if (displayed != "block") {
+                        keyboardContainer.style.display = "block";
+                        showKeyboard.textContent = "Ocultar Teclado";
+                    }
+                    else {
+                        keyboardContainer.style.display = "none";
+                        showKeyboard.textContent = "Mostrar Teclado";
+                    }
+
+                };
+/**
+//Recogemos Fichero del Servidor
+                var AcRecoger = document.getElementById("AcRecoger");
+                AcRecoger.onclick = function() {
+		 var minombre = document.getElementById("username");
+             var recoger = location.protocol+"//"+location.hostname+":"+location.port+"/storm/traspaso/"+minombre.value+"/outprintps.pdf";	
+		window.open(recoger);
+
+                };
+ 
+**/
+
+
+
+                // On-screen keyboard
+                var osKeyboard = new GuacamoleOnScreenKeyboard("layouts/es-es-qwerty.xml");
+                keyboardContainer.appendChild(osKeyboard);
+
+                osKeyboard.setKeyPressedHandler(
+                        function(keysym) {
+                            guac.sendKeyEvent(1, keysym);
+                        }
+                );
+
+                osKeyboard.setKeyReleasedHandler(
+                        function(keysym) {
+                            guac.sendKeyEvent(0, keysym);
+                        }
+                );
+
+            /**    // Send Ctrl-Alt-Delete
+                var CtrlAltDelete = document.getElementById("CtrlAltDelete");
+
+                CtrlAltDelete.onclick = function() {
+                    guac.sendKeyEvent(1, KEYSYM_CTRL);
+                    guac.sendKeyEvent(1, KEYSYM_ALT);
+                    guac.sendKeyEvent(1, KEYSYM_DELETE);
+                    guac.sendKeyEvent(0, KEYSYM_DELETE);
+                    guac.sendKeyEvent(0, KEYSYM_ALT);
+                    guac.sendKeyEvent(0, KEYSYM_CTRL);
+                } **/
+
+            }
+
+            /* ]]> */ </script>
+
+    </body>
+
+</html>
