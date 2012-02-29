@@ -2,11 +2,11 @@
 echo Instalando tomcat y librería vnc
 apt-get install tomcat6 libvncserver0 openjdk-6-jdk vnc4server fluxbox
 echo Compilando WAR
-cd ../storm-src
-jar cvf storm.war .
+cd ../guaca-src
+jar cvf guaca.war .
 echo Borrando WAR viejo
-rm ../final/storm.war
-cp storm.war ../final
+rm ../final/guaca.war
+cp guaca.war ../final
 cd ../final
 echo Listo , ahora a instalar
 
@@ -14,7 +14,7 @@ echo Limpiando ...
 
 rm -R /etc/guacamole
 rm -R /var/lib/guacamole
-rm -R /var/lib/tomcat6/webapps/sto*
+rm -R /var/lib/tomcat6/webapps/gua*
 rm /var/lib/tomcat6/common/classes/guacamole.properties
 echo Creando estructura ..
 mkdir /etc/guacamole
@@ -42,12 +42,12 @@ cp ./guacamole.properties /etc/guacamole/
 cp ./user-mapping.xml /etc/guacamole/
 chmod 777 /etc/guacamole/user-mapping.xml
 cp ./storm.war /var/lib/guacamole/guacamole.war
-ln -s /var/lib/guacamole/guacamole.war /var/lib/tomcat6/webapps/storm.war
+ln -s /var/lib/guacamole/guacamole.war /var/lib/tomcat6/webapps/guaca.war
 ln -s /etc/guacamole/guacamole.properties /var/lib/tomcat6/common/classes/
 echo Reiniciando Tomcat
 /etc/init.d/tomcat6 restart
 echo cambiando permisos en traspaso
-mkdir /var/lib/tomcat6/webapps/storm/traspaso
-chmod -R 777 /var/lib/tomcat6/webapps/storm/traspaso
-echo Listo. Ahora ejecute ustorm.sh con cada usuario a usar.
+mkdir /var/lib/tomcat6/webapps/guaca/traspaso
+chmod -R 777 /var/lib/tomcat6/webapps/guaca/traspaso
+echo Listo. Ahora ejecute uguaca.sh con cada usuario a usar.
 echo Listo ...

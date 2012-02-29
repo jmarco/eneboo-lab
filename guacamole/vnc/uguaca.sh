@@ -10,10 +10,8 @@ puerto=$(($1+5900))
 echo $puerto 
 echo Comienza la creación del usuario $2, en canal $1, con el password $3.  
 
-#echo Instalando ejecutable storm
-#unzip ./Abakudt.zip
-#cp -R ./Abakudt $HOME
-#chmod 775 $HOME/Abakudt/bin/fllite
+#echo Instalando ejecutable eneboo
+
 echo Creando nueva configuración Escritorio Virtual
 rm -R $HOME/.vnc
 mkdir $HOME/.vnc
@@ -47,9 +45,9 @@ cat user-mapping.xml.temporal > /etc/guacamole/user-mapping.xml
 #echo Borrado fichero temporal
 #rm ./user-mapping.xml.temporal
 echo Creando enlace a traspaso 
-rm -R $HOME/.flxcache
-mkdir /var/lib/tomcat6/webapps/storm/traspaso/$2
-ln -s /var/lib/tomcat6/webapps/storm/traspaso/$2 $HOME/.flxcache
-echo Listo.Recuerde modificar $HOME/.vnc/xstartup con la ruta correcta del ejecutable abakudt
+rm -R $HOME/.Guacamole
+mkdir /var/lib/tomcat6/webapps/guaca/traspaso/$2
+ln -s /var/lib/tomcat6/webapps/guaca/traspaso/$2 $HOME/.Guacamole
+echo Listo.Recuerde modificar $HOME/.vnc/xstartup con la ruta correcta del ejecutable eneboo
 fi
 
