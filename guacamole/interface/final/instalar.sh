@@ -42,7 +42,7 @@ cp ./guacamole.properties /etc/guacamole/
 cp ./user-mapping.xml /etc/guacamole/
 chmod 777 /etc/guacamole/user-mapping.xml
 cp ./guaca.war /var/lib/guacamole/guaca.war
-ln -s /var/lib/guacamole/guacamole.war /var/lib/tomcat6/webapps/guaca.war
+ln -s /var/lib/guacamole/guaca.war /var/lib/tomcat6/webapps/guaca.war
 ln -s /etc/guacamole/guacamole.properties /var/lib/tomcat6/common/classes/
 echo Reiniciando Tomcat
 /etc/init.d/tomcat6 restart

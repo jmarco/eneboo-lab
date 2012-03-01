@@ -24,7 +24,7 @@
         <link rel="icon" type="image/png" href="images/guacamole-icon-64.png"/>
         <link rel="stylesheet" type="text/css" href="styles/guacamole.css"/>
         <link rel="stylesheet" type="text/css" href="styles/keyboard.css"/>
-        <title>Abakudt Storm</title>
+        <title>Eneboo Guaca</title>
     </head>
 
     <body>
@@ -38,7 +38,7 @@
 
                 <div id="login-dialog">
 
-                    <h1>Abakudt Storm Login</h1>
+                    <h1>Eneboo Guaca Login</h1>
 
                     <p id="login-error"></p>
 
@@ -348,22 +348,15 @@
                      //   clipboardElement.value = data;
 			// var text = data;
 			
-			if (data == "STORM_IMPRIME") 
+			if (data == "GUACA_IMPRIME") 
 							{
 							//clipboardElement.value = "";
 							var minombre = document.getElementById("username");
-             						var recoger = location.protocol+"//"+location.hostname+":"+location.port+"/storm/traspaso/"+minombre.value+"/outprintps.pdf";	
+             						var recoger = location.protocol+"//"+location.hostname+":"+location.port+"/guaca/traspaso/"+minombre.value+"/outprintps.pdf";	
 							window.open(recoger);
 							guac.setClipboard(""); //limpiamos el portapapeles local,para que cuando venga de nuevo reaccione correctamente
 							}
-			if (data == "STORM_IMPRIME_J") 
-							{
-							//clipboardElement.value = "";
-							var minombre = document.getElementById("username");
-             						var recoger = location.protocol+"//"+location.hostname+":"+location.port+"/storm/traspaso/"+minombre.value+"/reporte.html";	
-							window.open(recoger);
-							guac.setClipboard(""); //limpiamos el portapapeles local,para que cuando venga de nuevo reaccione correctamente
-							}
+			
                     }
                 );
 

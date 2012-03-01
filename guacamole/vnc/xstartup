@@ -13,6 +13,6 @@ panel &
 x=1 &
 while [ x==1 ]
 	do
-$HOME/ruta_ejecutable/bin/eneboo 
+$HOME/eneboo/bin/eneboo 
        
        done
