@@ -1,0 +1,10 @@
+librería
+
+Xpm.java
+
+A mis cortas luces tendría que funcionar así 
+java.awt.image Xpm.XpmToImage($F{campodelaBD})
+
+
+
+

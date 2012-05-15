@@ -1,0 +1,13 @@
+Objetivo:
+
+Crear una librería java (.jar) para el tratamiento de plantillas JasperReports.
+Esta librería interactua con ejecutables eneboo recogiendo los datos facilitados por este.Carga la plantilla y la rellena de datos. Una vez lista, la muestra en el visor jasperviewer, dando la opción de imprimir y/o exportarla a un formato conocido.
+
+Se usará como OpenJDK como plataforma Java.
+
+
+JasperReports
+http://jasperforge.org/projects/jasperreports/
+
+OpenJDK
+http://openjdk.java.net/

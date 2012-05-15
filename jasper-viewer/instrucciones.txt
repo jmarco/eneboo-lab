@@ -1,0 +1,21 @@
+Necesitamos:
+Java OpenJDK
+
+ 
+cd build
+javac enebooreports.java
+jar -cmvf manifiesto.txt enebooreports.jar *
+
+nos creará el enebooreports.jar
+
+Para usarla
+
+Desde el ejecutable:
+copiamos la librería enebooreports.jar en path_de_eneboo/lib/enebooreports.jar
+
+Desde consola:
+mysql
+java -jar path_de_la_liberia_enebooreports.jar path_fichero_nombre.jrxml com.mysql.jdbc.Driver jdbc:mysql://"url":"puerto"/"nombrebd" usuarioBD passBD
+
+postgresql
+java -jar path_de_la_liberia_enebooreports.jar path_fichero_nombre.jrxml org.postgresql.Driver jdbc:postgresql://"url":"puerto"/"nombrebd" usuarioBD passBD
